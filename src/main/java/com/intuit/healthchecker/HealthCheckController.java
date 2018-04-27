@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/t360wsendpoints/health")
@@ -22,10 +21,10 @@ public class HealthCheckController {
         this.healthChecker = healthChecker;
     }
 
-    @GetMapping("")
-    public ResponseEntity<Map<String, Object>> check() {
-        Map<String, Object> health = healthChecker.checkEndpoints(endpoints);
+    @GetMapping
+    public ResponseEntity<TotalHealth> check() {
+        TotalHealth endpointsHealth = healthChecker.checkEndpoints(endpoints);
 
-        return ResponseEntity.ok(health);
+        return ResponseEntity.ok(endpointsHealth);
     }
 }
