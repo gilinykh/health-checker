@@ -4,9 +4,13 @@ import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,16 +20,25 @@ import static org.junit.Assert.assertEquals;
 @RunWith(EasyMockRunner.class)
 public class HealthCheckerServiceTests {
 
+    private String[] endpoints;
+
     @Mock
     private RESTfulHealthClient healthClient;
 
     @TestSubject
     private HealthCheckerService healthChecker = new HealthCheckerService(healthClient);
 
+    @Before
+    public void setup() throws IOException {
+        YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+        yaml.setResources(new ClassPathResource("application-test.yml"));
+        endpoints = yaml.getObject().getProperty("app.endpoints").split(",");
+    }
+
     @Test
     public void givenTwoEndpoints_whenCheckingHealth_thenCombinedHealthReturned() throws Exception {
-        String endpoint1 = "http://service1/health";
-        String endpoint2 = "http://service2/health";
+        String endpoint1 = endpoints[0];
+        String endpoint2 = endpoints[1];
         Map response1 = healthResponse("service1", health(true));
         Map response2 = healthResponse("service2", health(false));
 
