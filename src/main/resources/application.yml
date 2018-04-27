@@ -1,2 +1,1 @@
-app.endpoints: http://localhost:10080/health,
-               http://localhost:10090/health
+app.endpoints: http://health:10080/health
