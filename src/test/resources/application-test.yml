@@ -1,0 +1,2 @@
+app.endpoints: http://service1/health,
+               http://service2/health

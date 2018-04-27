@@ -1,0 +1,7 @@
+app.endpoints: https://cdm-e2e-qydc.payments.intuit.net/MMDS_CDMService/health,
+               https://cdm-e2e-qydc.payments.intuit.net/MMDS_Merchant/health,
+               https://ihubmonitors-e2e-qydc.payments.intuit.net/monitors/,
+               https://cdm-e2e-qydc.payments.intuit.net/MMDS_CDMPartner/health,
+               https://checkimages-e2e-qydc.payments.intuit.net/v2/checkimages/health,
+               https://txnv4services-e2e-qydc.payments.intuit.net/health
+
