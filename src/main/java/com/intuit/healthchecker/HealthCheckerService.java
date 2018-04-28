@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,13 @@ public class HealthCheckerService {
         }
 
         endpoints.forEach(endpoint -> {
-            Map<String, Object> endpointHealth = (Map<String, Object>) healthClient.fetchHealth(endpoint);
+            Map<String, Object> endpointHealth;
+
+            try {
+                endpointHealth = (Map<String, Object>) healthClient.fetchHealth(endpoint);
+            } catch (IOException e) {
+                return;
+            }
             Map.Entry<String, Object> healthEntry = endpointHealth.entrySet().iterator().next();
             result.put(healthEntry.getKey(), healthEntry.getValue());
         });

@@ -42,7 +42,7 @@ public class HealthCheckResourceTests {
 
         mockApi.expect(requestTo("http://service1/health"))
                 .andExpect(method(HttpMethod.GET))
-                .andRespond(withSuccess(response1, MediaType.APPLICATION_JSON));
+                .andRespond(withSuccess(response1, MediaType.TEXT_PLAIN));
 
         mockApi.expect(requestTo("http://service2/health"))
                 .andExpect(method(HttpMethod.GET))

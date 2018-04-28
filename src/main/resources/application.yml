@@ -5,3 +5,8 @@ app.endpoints: https://cdm-e2e-qydc.payments.intuit.net/MMDS_CDMService/health,
                https://checkimages-e2e-qydc.payments.intuit.net/v2/checkimages/health,
                https://txnv4services-e2e-qydc.payments.intuit.net/health
 
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.web.client: DEBUG
+    com.intuit.healthchecker: DEBUG
