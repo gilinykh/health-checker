@@ -10,3 +10,4 @@ logging:
     org.springframework.web: DEBUG
     org.springframework.web.client: DEBUG
     com.intuit.healthchecker: DEBUG
+  file: /tmp/health-checker.log
