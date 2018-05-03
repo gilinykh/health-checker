@@ -32,7 +32,7 @@ public class HealthCheckerService {
             Map<String, Object> endpointHealth;
 
             try {
-                endpointHealth = (Map<String, Object>) healthClient.fetchHealth(endpoint);
+                endpointHealth = healthClient.fetchHealth(endpoint);
             } catch (IOException e) {
                 return;
             }
