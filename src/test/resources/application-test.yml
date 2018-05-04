@@ -1,3 +1,4 @@
 app.endpoints: http://service1/health,
                http://service2/health,
-               http://service3/health
+               http://service3/health,
+               http://service4/health

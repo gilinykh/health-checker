@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class RESTfulHealthClient {
@@ -32,16 +33,53 @@ public class RESTfulHealthClient {
      */
     public Map<String, Object> fetchHealth(String url) throws IOException {
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-        Map<String, Object> result;
+        return HealthResponse.fromResponseEntity(response, url, objectMapper).asMap();
+    }
 
-        try {
-            result = objectMapper.readValue(response.getBody(), new TypeReference<Map>(){});
-        } catch (JsonParseException e) {
-            result = new HashMap<>();
-            result.put(url, response.getBody());
+    static class HealthResponse {
+        private static final String OK = "OK";
+        private static final String ERROR = "ERROR";
+        private Map<String, Object> health;
+
+        HealthResponse(Map<String, Object> health) {
+            this.health = Optional.ofNullable(health).orElse(new HashMap<>());
         }
 
-        return result;
+        Map<String, Object> asMap() {
+            return health;
+        }
+
+        static HealthResponse fromResponseEntity(ResponseEntity<String> responseEntity, String url, ObjectMapper objectMapper) throws IOException {
+            if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+                return asError(url);
+            }
+
+            if (responseEntity.getBody() == null) {
+                return asOk(url);
+            }
+
+            Map<String, Object> result;
+
+            try {
+                result = objectMapper.readValue(responseEntity.getBody(), new TypeReference<Map>(){});
+            } catch (JsonParseException e) {
+                return fromText(responseEntity.getBody(), url);
+            }
+
+            return new HealthResponse(result);
+        }
+
+        static HealthResponse asError(String url) {
+            return new HealthResponse(new HashMap() {{put(url, ERROR); }});
+        }
+
+        static HealthResponse asOk(String url) {
+            return new HealthResponse(new HashMap() {{put(url, OK); }});
+        }
+
+        static HealthResponse fromText(String responseText, String url) {
+            return new HealthResponse(new HashMap() {{put(url, responseText); }});
+        }
     }
 
 }

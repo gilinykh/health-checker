@@ -38,6 +38,7 @@ public class HealthCheckResourceTests {
 	    String response1 = "{\"service1\":{\"healthy\":true,\"message\":\"OK\"}}";
 	    String response2 = "{\"service2\":{\"healthy\":true,\"message\":\"OK\"}}";
 	    String response3 = "HealthCheck Ok";
+	    String response4 = null;
 
         MockRestServiceServer mockApi = MockRestServiceServer.createServer(restTemplate);
 
@@ -53,11 +54,16 @@ public class HealthCheckResourceTests {
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withSuccess(response3, MediaType.TEXT_PLAIN));
 
+        mockApi.expect(requestTo("http://service4/health"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess());
+
 		mockMvc.perform(get("/t360wsendpoints/health"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("service1.healthy").value(is(true)))
                 .andExpect(jsonPath("service2.healthy").value(is(true)))
                 // for plain text responses expected format is {<endpoint_url>:<health text response>}
-                .andExpect(jsonPath("http://service3/health").value(is("HealthCheck Ok")));
+                .andExpect(jsonPath("http://service3/health").value(is("HealthCheck Ok")))
+                .andExpect(jsonPath("http://service4/health").value(is("OK")));
     }
 }
