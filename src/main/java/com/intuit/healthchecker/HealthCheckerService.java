@@ -14,31 +14,27 @@ public class HealthCheckerService {
 
     private static final Logger log = LoggerFactory.getLogger(HealthCheckerService.class);
 
-    private RESTfulHealthClient healthClient;
+    private HealthCheckClient healthClient;
 
-    public HealthCheckerService(RESTfulHealthClient healthClient) {
+    public HealthCheckerService(HealthCheckClient healthClient) {
         this.healthClient = healthClient;
     }
 
-    public Map<String, Object> checkEndpoints(List<String> endpoints) {
+    public Map<String, Object> checkEndpoints(List<String> endpoints) throws IOException {
         Map<String, Object> result = new HashMap<>();
+        Map<String, Object> endpointHealth;
+        Map.Entry<String, Object> healthEntry;
 
         if (endpoints == null || endpoints.isEmpty()) {
             log.warn("Endpoints pool is empty. Check configuration.");
             return result;
         }
 
-        endpoints.forEach(endpoint -> {
-            Map<String, Object> endpointHealth;
-
-            try {
-                endpointHealth = healthClient.fetchHealth(endpoint);
-            } catch (IOException e) {
-                return;
-            }
-            Map.Entry<String, Object> healthEntry = endpointHealth.entrySet().iterator().next();
+        for (String endpoint : endpoints) {
+            endpointHealth = healthClient.fetchHealth(endpoint);
+            healthEntry = endpointHealth.entrySet().iterator().next();
             result.put(healthEntry.getKey(), healthEntry.getValue());
-        });
+        }
 
         return result;
     }

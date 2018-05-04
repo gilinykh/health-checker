@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = ApplicationLauncher.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-public class HealthCheckResourceTests {
+public class HealthCheck_IntegrationTests {
 
     @Autowired
     private RestTemplate restTemplate;

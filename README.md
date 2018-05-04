@@ -25,3 +25,9 @@ This file accepts configuration of endpoints to be checked in format:
 app.endpoints: http://service1-health-url,
                http://service2-health-url
 ```
+
+## Tests
+
+Tests with Clover coverage report can be run with this command:
+
+`mvn clean clover:setup test clover:aggregate clover:clover`

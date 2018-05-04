@@ -11,11 +11,13 @@ import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(EasyMockRunner.class)
 public class HealthCheckerServiceTests {
@@ -23,7 +25,7 @@ public class HealthCheckerServiceTests {
     private String[] endpoints;
 
     @Mock
-    private RESTfulHealthClient healthClient;
+    private HealthCheckClient healthClient;
 
     @TestSubject
     private HealthCheckerService healthChecker = new HealthCheckerService(healthClient);
@@ -50,6 +52,12 @@ public class HealthCheckerServiceTests {
         Map checkedHealth = healthChecker.checkEndpoints(asList(endpoint1, endpoint2));
         assertEquals(true, ((Map)checkedHealth.get("service1")).get("healthy"));
         assertEquals(false, ((Map)checkedHealth.get("service2")).get("healthy"));
+    }
+
+    @Test
+    public void givenZeroEndpoints_whenCheckingHealth_thenEmptyResult() throws Exception {
+        Map checkedHealth = healthChecker.checkEndpoints(new ArrayList<>());
+        assertTrue(checkedHealth.isEmpty());
     }
 
     private Map health(boolean healthy) {

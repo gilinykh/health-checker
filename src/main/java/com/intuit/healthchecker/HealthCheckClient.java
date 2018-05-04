@@ -13,13 +13,13 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-public class RESTfulHealthClient {
+public class HealthCheckClient {
 
     private RestTemplate restTemplate;
 
     private ObjectMapper objectMapper;
 
-    public RESTfulHealthClient(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public HealthCheckClient(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
     }
