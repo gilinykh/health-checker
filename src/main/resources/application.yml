@@ -1,13 +1,18 @@
-app.endpoints: https://cdm-e2e-qydc.payments.intuit.net/MMDS_CDMService/health,
-               https://cdm-e2e-qydc.payments.intuit.net/MMDS_Merchant/health,
-               https://ihubmonitors-e2e-qydc.payments.intuit.net/monitors/,
-               https://cdm-e2e-qydc.payments.intuit.net/MMDS_CDMPartner/health,
-               https://checkimages-e2e-qydc.payments.intuit.net/v2/checkimages/health,
-               https://txnv4services-e2e-qydc.payments.intuit.net/health
+app.endpoints: https://checkimages.payments.intuit.net/T360_CheckImage/v2/checkimages/health,
+               https://checkimages.payments.intuit.net/T360_CheckImage/v2/signatureimages/health,
+               https://cdm.ihub.payments.intuit.com/MMDS_CDMService/v2/authorizations/health,
+               https://cdm.ihub.payments.intuit.com/MMDS_CDMService/v2/transactions/health,
+               https://cdm.ihub.payments.intuit.com/MMDS_CDMService/v2/mobilesignatures/health,
+               https://cdm.ihub.payments.intuit.com/MMDS_CDMService/v2/batch/health,
+               https://cdm.ihub.payments.intuit.com/Merchant-Report/v2/merchantdashboard/health,
+               https://txnv4services.payments.intuit.net/health,
+               https://lookup.ihub.payments.intuit.com/v2/health,
+               https://txndisposition.payments.intuit.net/T360_TxnDisposition/v2/txnlifecycle/health
+
+
 
 logging:
   level:
     org.springframework.web: DEBUG
     org.springframework.web.client: DEBUG
     com.intuit.healthchecker: DEBUG
-  file: /tmp/health-checker.log

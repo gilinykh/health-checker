@@ -1,4 +1,2 @@
-app.endpoints: http://service1/health,
-               http://service2/health,
-               http://service3/health,
-               http://service4/health
+app.endpoints: https://txnv4services.payments.intuit.net/health,
+               https://lookup.ihub.payments.intuit.com/v2/health

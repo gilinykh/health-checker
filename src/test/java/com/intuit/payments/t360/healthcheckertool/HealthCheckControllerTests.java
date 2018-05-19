@@ -1,4 +1,4 @@
-package com.intuit.healthchecker;
+package com.intuit.payments.t360.healthcheckertool;
 
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
@@ -18,14 +18,14 @@ import static org.junit.Assert.assertEquals;
 public class HealthCheckControllerTests {
 
     @Mock
-    private HealthCheckerService checkerService;
+    private HealthCheckService checkerService;
 
     @TestSubject
-    private HealthCheckController checkController = new HealthCheckController(new String[] {}, checkerService);
+    private HealthCheckController checkController = new HealthCheckController(new String[]{}, checkerService);
 
     @Test
     public void testControllerOperational() throws Exception {
-        EasyMock.expect(checkerService.checkEndpoints(Collections.emptyList())).andReturn(new HashMap<>());
+        EasyMock.expect(checkerService.checkEndpoints(Collections.<String>emptyList())).andReturn(new HashMap<String, Object>());
 
         EasyMock.replay(checkerService);
 

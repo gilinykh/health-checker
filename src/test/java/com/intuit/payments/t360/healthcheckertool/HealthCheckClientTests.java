@@ -1,6 +1,7 @@
-package com.intuit.healthchecker;
+package com.intuit.payments.t360.healthcheckertool;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -28,7 +29,7 @@ public class HealthCheckClientTests {
 
     @Test
     public void testEmptyBody() throws Exception {
-        EasyMock.expect(restTemplate.getForEntity("url", String.class)).andReturn(ResponseEntity.ok().build());
+        EasyMock.expect(restTemplate.getForEntity("url", String.class)).andReturn(ResponseEntity.ok().<String>build());
 
         EasyMock.replay(restTemplate);
 
@@ -64,7 +65,7 @@ public class HealthCheckClientTests {
 
     @Test
     public void testError() throws Exception {
-        EasyMock.expect(restTemplate.getForEntity("url", String.class)).andReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+        EasyMock.expect(restTemplate.getForEntity("url", String.class)).andReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).<String>build());
 
         EasyMock.replay(restTemplate);
 

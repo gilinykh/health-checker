@@ -1,4 +1,4 @@
-package com.intuit.healthchecker;
+package com.intuit.payments.t360.healthcheckertool;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +16,9 @@ import java.util.Map;
 public class HealthCheckController {
 
     private List<String> endpoints;
-    private HealthCheckerService healthChecker;
+    private HealthCheckService healthChecker;
 
-    public HealthCheckController(@Value("${app.endpoints}") String[] endpoints, HealthCheckerService healthChecker) {
+    public HealthCheckController(@Value("${app.endpoints}") String[] endpoints, HealthCheckService healthChecker) {
         this.endpoints = Arrays.asList(endpoints);
         this.healthChecker = healthChecker;
     }

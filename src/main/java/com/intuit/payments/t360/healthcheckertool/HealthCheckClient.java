@@ -1,8 +1,9 @@
-package com.intuit.healthchecker;
+package com.intuit.payments.t360.healthcheckertool;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -10,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Component
 public class HealthCheckClient {
@@ -27,6 +27,7 @@ public class HealthCheckClient {
     /**
      * Fetch health response as JSON from the provided endpoint.
      * NOTE: if the response is plain-text (JSON cannot be parsed); return in format {<endpoint_url>:<health text response>}
+     *
      * @param url Health endpoint.
      * @return JSON representation of health response.
      * @throws IOException in case of any IO problems.
@@ -42,7 +43,7 @@ public class HealthCheckClient {
         private Map<String, Object> health;
 
         HealthResponse(Map<String, Object> health) {
-            this.health = Optional.ofNullable(health).orElse(new HashMap<>());
+            this.health = health != null ? health : new HashMap<String, Object>();
         }
 
         Map<String, Object> asMap() {
@@ -61,7 +62,7 @@ public class HealthCheckClient {
             Map<String, Object> result;
 
             try {
-                result = objectMapper.readValue(responseEntity.getBody(), new TypeReference<Map>(){});
+                result = objectMapper.readValue(responseEntity.getBody(), new TypeReference<Map>() {});
             } catch (JsonParseException e) {
                 return fromText(responseEntity.getBody(), url);
             }
@@ -69,16 +70,22 @@ public class HealthCheckClient {
             return new HealthResponse(result);
         }
 
-        static HealthResponse asError(String url) {
-            return new HealthResponse(new HashMap() {{put(url, ERROR); }});
+        static HealthResponse asError(final String url) {
+            return new HealthResponse(new HashMap() {{
+                put(url, ERROR);
+            }});
         }
 
-        static HealthResponse asOk(String url) {
-            return new HealthResponse(new HashMap() {{put(url, OK); }});
+        static HealthResponse asOk(final String url) {
+            return new HealthResponse(new HashMap() {{
+                put(url, OK);
+            }});
         }
 
-        static HealthResponse fromText(String responseText, String url) {
-            return new HealthResponse(new HashMap() {{put(url, responseText); }});
+        static HealthResponse fromText(final String responseText, final String url) {
+            return new HealthResponse(new HashMap() {{
+                put(url, responseText);
+            }});
         }
     }
 
