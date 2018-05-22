@@ -12,6 +12,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,19 +45,20 @@ public class HealthCheckerServiceTests {
         Map response1 = healthResponse("txnv4services.payments.intuit.net", health(true));
         Map response2 = healthResponse("lookup.ihub.payments.intuit.com/v2", health(false));
 
-        EasyMock.expect(healthClient.fetchHealth(endpoint1)).andReturn(response1);
-        EasyMock.expect(healthClient.fetchHealth(endpoint2)).andReturn(response2);
+        EasyMock.expect(healthClient.fetchHealth(endpoint1)).andReturn(new HealthResponse("txnv4services.payments.intuit.net",response1));
+        EasyMock.expect(healthClient.fetchHealth(endpoint2)).andReturn(new HealthResponse("lookup.ihub.payments.intuit.com/v2", response2));
 
         EasyMock.replay(healthClient);
 
-        Map checkedHealth = healthChecker.checkEndpoints(asList(endpoint1, endpoint2));
+        Collection<HealthResponse> responses = healthChecker.checkEndpoints(asList(endpoint1, endpoint2));
+        Map<String, Map<String, Object>> checkedHealth = HealthResponseCollectionRepresentation.from(responses).asMap();
         assertEquals(true, ((Map) checkedHealth.get("txnv4services.payments.intuit.net")).get("healthy"));
         assertEquals(false, ((Map) checkedHealth.get("lookup.ihub.payments.intuit.com/v2")).get("healthy"));
     }
 
     @Test
     public void givenZeroEndpoints_whenCheckingHealth_thenEmptyResult() throws Exception {
-        Map checkedHealth = healthChecker.checkEndpoints(new ArrayList<String>());
+        Collection<HealthResponse> checkedHealth = healthChecker.checkEndpoints(new ArrayList<String>());
         assertTrue(checkedHealth.isEmpty());
     }
 

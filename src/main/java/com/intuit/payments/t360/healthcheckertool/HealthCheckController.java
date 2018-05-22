@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -24,9 +25,9 @@ public class HealthCheckController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> check() throws IOException {
-        Map<String, Object> health = healthChecker.checkEndpoints(endpoints);
+    public ResponseEntity<Map<String, Map<String, Object>>> check() throws IOException {
+        Collection<HealthResponse> healthResponses = healthChecker.checkEndpoints(endpoints);
 
-        return ResponseEntity.ok(health);
+        return ResponseEntity.ok(HealthResponseCollectionRepresentation.from(healthResponses).asMap());
     }
 }

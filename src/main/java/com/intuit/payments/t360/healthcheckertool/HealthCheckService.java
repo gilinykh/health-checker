@@ -5,9 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class HealthCheckService {
@@ -20,10 +18,8 @@ public class HealthCheckService {
         this.healthClient = healthClient;
     }
 
-    public Map<String, Object> checkEndpoints(List<String> endpoints) throws IOException {
-        Map<String, Object> result = new HashMap<>();
-        Map<String, Object> endpointHealth;
-        Map.Entry<String, Object> healthEntry;
+    public Collection<HealthResponse> checkEndpoints(List<String> endpoints) throws IOException {
+        Collection<HealthResponse> result = new ArrayList<>();
 
         if (endpoints == null || endpoints.isEmpty()) {
             log.warn("Endpoints pool is empty. Check configuration.");
@@ -31,9 +27,7 @@ public class HealthCheckService {
         }
 
         for (String endpoint : endpoints) {
-            endpointHealth = healthClient.fetchHealth(endpoint);
-            healthEntry = endpointHealth.entrySet().iterator().next();
-            result.put(healthEntry.getKey(), healthEntry.getValue());
+            result.add(healthClient.fetchHealth(endpoint));
         }
 
         return result;

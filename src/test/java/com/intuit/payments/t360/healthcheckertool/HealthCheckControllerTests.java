@@ -9,8 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,11 +24,25 @@ public class HealthCheckControllerTests {
 
     @Test
     public void testControllerOperational() throws Exception {
-        EasyMock.expect(checkerService.checkEndpoints(Collections.<String>emptyList())).andReturn(new HashMap<String, Object>());
+        EasyMock.expect(checkerService.checkEndpoints(Collections.<String>emptyList()))
+                .andReturn(Arrays.asList(new HealthResponse("txnv4services.payments.intuit.net", healthResponse("txnv4services.payments.intuit.net", health(true)))));
 
         EasyMock.replay(checkerService);
 
         ResponseEntity checked = checkController.check();
         assertEquals(HttpStatus.OK, checked.getStatusCode());
+    }
+
+    private Map<String, Object> health(boolean healthy) {
+        Map<String, Object> health = new HashMap<>();
+        health.put("healthy", healthy);
+        health.put("message", "OK");
+        return health;
+    }
+
+    private Map<String, Map<String, Object>> healthResponse(String serviceName, Map<String, Object> health) {
+        Map<String, Map<String, Object>> healthResponse = new HashMap<>();
+        healthResponse.put(serviceName, health);
+        return healthResponse;
     }
 }
