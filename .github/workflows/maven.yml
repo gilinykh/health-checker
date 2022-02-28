@@ -41,5 +41,5 @@ jobs:
       run: |
        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
        ssh-add - <<< "${{ secrets.DEPLOY_SERVER_KEY }}"
-       scp -o StrictHostKeyChecking=no -r -P 59666 ./target/*.jar root@${{ secrets.DEPLOY_SERVER_HOST }}:/tmp  
+       scp -o StrictHostKeyChecking=no ./target/*.jar root@${{ secrets.DEPLOY_SERVER_HOST }}:/tmp  
         
