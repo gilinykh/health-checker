@@ -24,6 +24,8 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name: List current directory
+      run: ls -la      
     - name: Output Run Number
       run: echo ${{ github.run_number }}      
     - name: Install SSH key
@@ -39,5 +41,5 @@ jobs:
       run: |
        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
        ssh-add - <<< "${{ secrets.DEPLOY_SERVER_KEY }}"
-       scp -o StrictHostKeyChecking=no -r -P 59666 ./ root@${{ secrets.DEPLOY_SERVER_HOST }}:/tmp  
+       scp -o StrictHostKeyChecking=no -r -P 59666 ./target/*.jar root@${{ secrets.DEPLOY_SERVER_HOST }}:/tmp  
         
